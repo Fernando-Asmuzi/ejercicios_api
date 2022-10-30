@@ -20,7 +20,7 @@ app.use(express.json());
 
 //Routes
 app.use('/api/inicio', require('./routes/alumno.route.js'));
-app.use('/api/ejercicio', require('./routes/ejercicio.route.js'));
+
 
 //starting server 
 app.listen(app.get('port'), () => { 

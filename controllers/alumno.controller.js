@@ -37,4 +37,22 @@ alumnoCtrl.postEjercicio = async (req, res) => {
     });
 }
 
+alumnoCtrl.getPorcentajeTotal = async (req, res) => {
+    const { id_alumno} = req.params;
+    mysqlConnection.query('SELECT porcentaje FROM alumno_ejercicio WHERE alumno_id = ?', [id_alumno], (err, rows, fields) => {
+        if (!err) {
+            res.json({ 
+                ok: true,
+                rows: rows
+            });
+        } else {
+            res.json({ 
+                ok: false,
+                error: err
+            });
+        }
+    });
+}
+
+
 module.exports = alumnoCtrl;
