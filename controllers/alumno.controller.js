@@ -37,9 +37,9 @@ alumnoCtrl.postEjercicio = async (req, res) => {
     });
 }
 
-alumnoCtrl.getPorcentajeTotal = async (req, res) => {
-    const { id_alumno} = req.params;
-    mysqlConnection.query('SELECT porcentaje FROM alumno_ejercicio WHERE alumno_id = ?', [id_alumno], (err, rows, fields) => {
+alumnoCtrl.getPorcentajeTotal = async(req, res) => {
+    const { id_alumno } = req.params;
+    mysqlConnection.query('SELECT SUM(porcentaje) FROM alumno_ejercicio WHERE alumno_id = ?', [id_alumno], (err, rows, fields) => {
         if (!err) {
             res.json({ 
                 ok: true,
@@ -54,5 +54,58 @@ alumnoCtrl.getPorcentajeTotal = async (req, res) => {
     });
 }
 
+alumnoCtrl.getTiempoTotal = async(req, res) => {
+    const { id_alumno } = req.params;
+    mysqlConnection.query('SELECT SUM(tiempo) FROM alumno_ejercicio WHERE alumno_id = ?', [id_alumno], (err, rows, fields) => {
+        if (!err) {
+            res.json({ 
+                ok: true,
+                rows: rows
+            });
+        } else {
+            res.json({ 
+                ok: false,
+                error: err
+            });
+        }
+    });
+}
+
+alumnoCtrl.getAlumnoEjercicioResuelto = async (req, res) => {
+    const { id_alumno, id_ejercicio } = req.params;
+    mysqlConnection.query('SELECT * FROM alumno_ejercicio WHERE alumno_id = ?  AND ejercicio_id = ?', [id_alumno, id_ejercicio], (err, rows, fields) => {
+        if (!err) {
+            res.json({ 
+                ok: true,
+                rows: rows
+            });
+        } else {
+            res.json({ 
+                ok: false,
+                error: err
+            });
+        }
+    });
+}
+
+alumnoCtrl.postResultado = async (req, res) => {
+    const {alu_id,  tiempo_total, porcentaje_total, fecha} = req.body;
+    
+    let sql = 'INSERT INTO resultado(alu_id,  tiempo_total, porcentaje_total, fecha) VALUES (?,?,?,?)';
+    var valores = [alu_id,  tiempo_total, porcentaje_total, fecha];
+
+    mysqlConnection.query(sql, valores, (err, rows, fields) => {
+        if (!err) {
+            res.json({ 
+                ok: true 
+            });
+        } else {
+            res.json({ 
+                ok: false,
+                error: err
+            });
+        }
+    });
+}
 
 module.exports = alumnoCtrl;
