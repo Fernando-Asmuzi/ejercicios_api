@@ -19,7 +19,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 //Routes
-app.use('/api/inicio', require('./routes/alumno.route.js'));
+app.use('/api', require('./routes/paciente.route.js'));
 
 
 //starting server 
